@@ -6,19 +6,13 @@ import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
 import org.sopt.dosopttemplate.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /**
-         * 빌드 할때 만들어 BindingCLass
-         * 큰단위
-         * 데이터 바인딩 컴파일
-         * 컴파일 조각들이 빌드 속에
-         * **/
-        binding = ActivityMainBinding.inflate(layoutInflater)
 //        binding =  DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         login()
     }
