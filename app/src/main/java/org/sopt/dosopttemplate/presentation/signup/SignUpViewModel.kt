@@ -1,6 +1,5 @@
 package org.sopt.dosopttemplate.presentation.signup
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,9 +17,11 @@ class SignUpViewModel() : ViewModel() {
     private val _eventFlow = MutableSharedFlow<Event>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    fun isCorrectUserInfo(user:User) {
-        if (!checkIdLength(user.id) || !checkPwLength(user.pwd)) _signUpResult.postValue(SignUpState.FAIL)
-        else if (user.sojuCount.isBlank()) _signUpResult.postValue(SignUpState.EMPTY)
+    fun isCorrectUserInfo(user: User) {
+        if (!isValid(user)) _signUpResult.postValue(SignUpState.EMPTY)
+        else if (!checkIdLength(user.id) || !checkPwLength(user.pwd) || !isValidNickname(user.nickname)) _signUpResult.postValue(
+            SignUpState.FAIL
+        )
         else _signUpResult.postValue(SignUpState.SUCCESS)
     }
 
@@ -29,6 +30,14 @@ class SignUpViewModel() : ViewModel() {
 
     private fun checkPwLength(pw: String) =
         pw.isBlank() || pw.length in 8..12
+
+    private fun isValid(user: User) =
+        user.id.isNotBlank() && user.pwd.isNotBlank() && user.nickname.isNotBlank() && user.sojuCount.isNotBlank()
+
+    private fun isValidNickname(nickname: String): Boolean {
+        val regex = """^(?!\s+$).{1,}$""".toRegex()
+        return regex.matches(nickname)
+    }
 
     fun signUpEvent() {
         event(Event.SignUp(Unit))
@@ -42,6 +51,7 @@ class SignUpViewModel() : ViewModel() {
         data class SignUp(val p: Unit) : Event()
     }
 }
+
 enum class SignUpState {
     SUCCESS,
     FAIL,

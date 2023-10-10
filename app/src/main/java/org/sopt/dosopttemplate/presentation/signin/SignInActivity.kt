@@ -15,6 +15,7 @@ import org.sopt.dosopttemplate.ui.base.BindingActivity
 import org.sopt.dosopttemplate.ui.context.getParcelable
 import org.sopt.dosopttemplate.ui.context.repeatOnStarted
 import org.sopt.dosopttemplate.ui.context.snackBar
+import org.sopt.dosopttemplate.ui.context.toast
 
 class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_sign_in) {
 
@@ -88,6 +89,7 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
         signInViewModel.signInResult.observe(this@SignInActivity) { signInResult ->
             when (signInResult) {
                 SignInState.SUCCESS -> {
+                    toast(SUCCESS_SIGN_MSG)
                     navigateTo<MainActivity>()
                     finish()
                 }
@@ -108,6 +110,7 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
 
     companion object {
         const val USER = "USER"
+        const val SUCCESS_SIGN_MSG = "로그인 성공"
         const val FAIL_MSG = "아디나 비번 다름"
         const val EMPTY_MSG = "비었음"
         const val NEED_SIGN_UP_MSG = "먼저 회원가입"

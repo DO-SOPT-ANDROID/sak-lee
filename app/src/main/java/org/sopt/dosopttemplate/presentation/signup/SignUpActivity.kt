@@ -56,7 +56,7 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
             when (signUpResult) {
                 SignUpState.SUCCESS -> navigateToLoginActivity(user)
                 SignUpState.FAIL -> snackBar(binding.root) { "아디나 비번 길이 안맞음" }
-                SignUpState.EMPTY -> snackBar(binding.root) { "주량 빔" }
+                SignUpState.EMPTY -> snackBar(binding.root) { "모든 값을 입력" }
             }
         }
     }

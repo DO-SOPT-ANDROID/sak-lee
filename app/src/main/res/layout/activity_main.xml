@@ -12,28 +12,74 @@
         android:paddingHorizontal="30dp"
         android:paddingVertical="30dp">
 
-        <TextView
-            android:id="@+id/tv_id"
+        <ImageView
+            android:id="@+id/iv_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintDimensionRatio="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_soju_count"
+            android:id="@+id/tv_id_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="아이디:"
+            android:textSize="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_user" />
+
+        <TextView
+            android:id="@+id/tv_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:textSize="15dp"
+            app:layout_constraintStart_toEndOf="@id/tv_id_title"
+            app:layout_constraintTop_toBottomOf="@id/iv_user" />
+
+        <TextView
+            android:id="@+id/tv_soju_count_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="주량:"
             android:textSize="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_id" />
 
         <TextView
-            android:id="@+id/tv_nickname"
+            android:id="@+id/tv_soju_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:textSize="15dp"
+            app:layout_constraintStart_toEndOf="@id/tv_soju_count_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_id" />
+
+        <TextView
+            android:id="@+id/tv_nickname_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="이름:"
             android:textSize="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_soju_count" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:textSize="15dp"
+            app:layout_constraintStart_toEndOf="@id/tv_nickname_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_soju_count" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

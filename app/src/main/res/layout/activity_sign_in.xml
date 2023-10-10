@@ -57,6 +57,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="비번를 입력"
+            android:inputType="textPassword"
             android:textSize="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,6 +72,7 @@
             app:layout_constraintBottom_toTopOf="@id/btn_sign_in"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
         <Button
             android:id="@+id/btn_sign_in"
             android:layout_width="0dp"
