@@ -6,10 +6,10 @@ import androidx.activity.viewModels
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding
 import org.sopt.dosopttemplate.presentation.model.User
-import org.sopt.dosopttemplate.presentation.signin.SignInActivity.Companion.USER
 import org.sopt.dosopttemplate.ui.base.BindingActivity
 import org.sopt.dosopttemplate.ui.context.repeatOnStarted
 import org.sopt.dosopttemplate.ui.context.snackBar
+import org.sopt.dosopttemplate.ui.context.toast
 
 class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_sign_up) {
 
@@ -54,9 +54,13 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
     private fun isCheckSignUpResult() {
         signUpViewModel.signUpResult.observe(this@SignUpActivity) { signUpResult ->
             when (signUpResult) {
-                SignUpState.SUCCESS -> navigateToLoginActivity(user)
-                SignUpState.FAIL -> snackBar(binding.root) { "아디나 비번 길이 안맞음" }
-                SignUpState.EMPTY -> snackBar(binding.root) { "모든 값을 입력" }
+                SignUpState.SUCCESS -> {
+                    navigateToLoginActivity(user)
+                    toast(SUCCESS_SIGN_MSG)
+                }
+
+                SignUpState.FAIL -> snackBar(binding.root) { FAIL_MSG }
+                SignUpState.EMPTY -> snackBar(binding.root) { EMPTY_MSG }
             }
         }
     }
@@ -65,6 +69,13 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
         intent.putExtra(USER, usel)
         setResult(RESULT_OK, intent)
         finish()
+    }
+
+    companion object {
+        const val USER = "USER"
+        const val SUCCESS_SIGN_MSG = "회원가입 성공"
+        const val FAIL_MSG = "아디나 비번 길이 안맞음"
+        const val EMPTY_MSG = "모든 값을 입력"
     }
 }
 
