@@ -16,8 +16,8 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello DO SOPT!"
-            android:textSize="40dp"
+            android:text="@string/tv_sign_in_title"
+            android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,8 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="ID"
-            android:textSize="30dp"
+            android:text="@string/tv_sign_in_id_title"
+            android:textSize="30sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
@@ -36,8 +36,8 @@
             android:id="@+id/etv_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="아이디를 입력"
-            android:textSize="30dp"
+            android:hint="@string/etv_sign_in_id"
+            android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_id_title" />
@@ -47,8 +47,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="PASSWORD"
-            android:textSize="30dp"
+            android:text="@string/tv_sign_in_pwd_title"
+            android:textSize="30sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etv_id" />
 
@@ -56,9 +56,9 @@
             android:id="@+id/etv_pwd"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="비번를 입력"
+            android:hint="@string/etv_sign_in_pwd"
             android:inputType="textPassword"
-            android:textSize="30dp"
+            android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_pwd_title" />
@@ -67,7 +67,7 @@
             android:id="@+id/btn_navigate_sign_up"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="회원가입"
+            android:text="@string/btn_sign_in_sign_in"
             android:textSize="30dp"
             app:layout_constraintBottom_toTopOf="@id/btn_sign_in"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,8 +77,8 @@
             android:id="@+id/btn_sign_in"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="로그인"
-            android:textSize="30dp"
+            android:text="@string/btn_sign_in_sign_up"
+            android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

@@ -15,21 +15,21 @@ class MainActivity : AppCompatActivity() {
     private lateinit var user: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        binding = ActivityMainBinding.inflate(layoutInflater)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setContentView(binding.root)
 
-        user = intent?.getParcelable(USER, User::class.java) ?: return
         initView()
     }
 
     private fun initView() {
+
+        user = intent?.getParcelable(USER, User::class.java) ?: return
+
         with(binding) {
             tvId.text = user.id
             tvSojuCount.text = user.sojuCount
             tvNickname.text = user.nickname
         }
     }
-
 
 }

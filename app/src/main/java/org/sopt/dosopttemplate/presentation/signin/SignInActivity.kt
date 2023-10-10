@@ -67,10 +67,14 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
             }
         }
 
-        is SignInViewModel.Event.navigateSignUp -> {
-            Intent(this, SignUpActivity::class.java).apply {
-                returnSignUpLauncher.launch(this)
-            }
+        is SignInViewModel.Event.NavigateSignUp -> {
+            navigateToSignUp()
+        }
+    }
+
+    private fun navigateToSignUp() {
+        Intent(this, SignUpActivity::class.java).apply {
+            returnSignUpLauncher.launch(this)
         }
     }
 

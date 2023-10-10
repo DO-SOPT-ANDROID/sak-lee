@@ -38,16 +38,17 @@ class SignInViewModel() : ViewModel() {
     }
 
     fun navigateSignUpEvent() {
-        event(Event.navigateSignUp(Unit))
+        event(Event.NavigateSignUp(Unit))
     }
 
     private fun event(event: Event) {
         viewModelScope.launch { _eventFlow.emit(event) }
     }
 
+    //편하게 보세요
     sealed class Event {
         data class SignIn(val p: Unit) : Event()
-        data class navigateSignUp(val p: Unit) : Event()
+        data class NavigateSignUp(val p: Unit) : Event()
     }
 }
 
