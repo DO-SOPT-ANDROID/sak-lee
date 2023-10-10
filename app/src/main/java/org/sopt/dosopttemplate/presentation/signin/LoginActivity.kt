@@ -1,8 +1,7 @@
-package org.sopt.dosopttemplate
+package org.sopt.dosopttemplate.presentation.signin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
 import org.sopt.dosopttemplate.databinding.ActivityMainBinding
 
