@@ -54,13 +54,16 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
 
     private fun handleEvent(event: SignInViewModel.Event) = when (event) {
         is SignInViewModel.Event.SignIn -> {
-            user = User(
-                binding.etvId.text.toString(),
-                binding.etvPwd.text.toString(),
-                ""
-            )
             if (!::regaxUser.isInitialized) snackBar(binding.root) { NEED_SIGN_UP_MSG }
-            else signInViewModel.isCorrectUserInfo(user, regaxUser)
+            else {
+                user = User(
+                    binding.etvId.text.toString(),
+                    binding.etvPwd.text.toString(),
+                    regaxUser.sojuCount,
+                    regaxUser.nickname
+                )
+                signInViewModel.isCorrectUserInfo(user, regaxUser)
+            }
         }
 
         is SignInViewModel.Event.navigateSignUp -> {
@@ -88,15 +91,16 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
                     navigateTo<MainActivity>()
                     finish()
                 }
+
                 SignInState.FAIL -> snackBar(binding.root) { FAIL_MSG }
                 SignInState.EMPTY -> snackBar(binding.root) { EMPTY_MSG }
             }
         }
     }
 
-
     private inline fun <reified T : Activity> navigateTo() {
         Intent(this@SignInActivity, T::class.java).apply {
+            putExtra(USER, user)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(this)
         }

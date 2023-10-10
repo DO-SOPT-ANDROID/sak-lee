@@ -39,11 +39,12 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
     private fun handleEvent(event: SignUpViewModel.Event) = when (event) {
         is SignUpViewModel.Event.SignUp -> {
             Log.d("내맘", "덤벼라 오비")
-            user = with(binding){
+            user = with(binding) {
                 User(
-                    binding.etvId.text.toString(),
-                    binding.etvPwd.text.toString(),
-                    binding.etvSojuCount.text.toString()
+                    etvId.text.toString(),
+                    etvPwd.text.toString(),
+                    etvSojuCount.text.toString(),
+                    etvNickname.text.toString()
                 )
             }
             signUpViewModel.isCorrectUserInfo(user)
