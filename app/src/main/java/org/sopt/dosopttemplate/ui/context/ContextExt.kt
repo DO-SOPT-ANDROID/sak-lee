@@ -2,9 +2,11 @@ package org.sopt.dosopttemplate.ui.context
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -14,7 +16,13 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 fun Context.toast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -49,4 +57,17 @@ fun Context.dialogFragmentResize(dialogFragment: DialogFragment, horizontalMargi
         WindowManager.LayoutParams.WRAP_CONTENT
     )
     dialogFragment.dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+}
+
+fun LifecycleOwner.repeatOnStarted(block: suspend CoroutineScope.() -> Unit) {
+    lifecycleScope.launch {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED, block)
+    }
+}
+fun <T> Intent.getParcelable(name: String, clazz: Class<T>): T? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getParcelableExtra(name, clazz)
+    } else {
+        getParcelableExtra(name)
+    }
 }
