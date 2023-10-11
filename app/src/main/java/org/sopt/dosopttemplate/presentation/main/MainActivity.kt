@@ -22,13 +22,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-
-        user = intent?.getParcelable(USER, User::class.java) ?: return
+        val user: User? = if (intent != null) {
+            intent.getParcelable(USER, User::class.java) as? User
+        } else {
+            null
+        }
 
         with(binding) {
-            tvId.text = user.id
-            tvSojuCount.text = user.sojuCount
-            tvNickname.text = user.nickname
+            tvId.text = user?.id
+            tvSojuCount.text = user?.sojuCount
+            tvNickname.text = user?.nickname
         }
     }
 
