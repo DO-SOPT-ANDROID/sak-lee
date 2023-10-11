@@ -12,7 +12,6 @@ import org.sopt.dosopttemplate.ui.context.getParcelable
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var user: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -22,11 +21,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        val user: User? = if (intent != null) {
-            intent.getParcelable(USER, User::class.java) as? User
-        } else {
-            null
-        }
+        val user = intent.getParcelable(USER, User::class.java)
 
         with(binding) {
             tvId.text = user?.id
