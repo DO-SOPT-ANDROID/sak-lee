@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivitySignInBinding
 import org.sopt.dosopttemplate.presentation.main.MainActivity
@@ -17,12 +18,18 @@ import org.sopt.dosopttemplate.ui.context.repeatOnStarted
 import org.sopt.dosopttemplate.ui.context.snackBar
 import org.sopt.dosopttemplate.ui.context.toast
 
+@AndroidEntryPoint
 class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_sign_in) {
 
     private lateinit var user: User
     private lateinit var regaxUser: User
     private lateinit var returnSignUpLauncher: ActivityResultLauncher<Intent>
     private val signInViewModel: SignInViewModel by viewModels()
+
+    override fun onStart() {
+        if (signInViewModel.checkLogin()) navigateTo<MainActivity>()
+        super.onStart()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,6 +101,7 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
             when (signInResult) {
                 SignInState.SUCCESS -> {
                     toast(SUCCESS_SIGN_MSG)
+                    signInViewModel.signIn(user)
                     navigateTo<MainActivity>()
                     finish()
                 }
@@ -106,7 +114,6 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
 
     private inline fun <reified T : Activity> navigateTo() {
         Intent(this@SignInActivity, T::class.java).apply {
-            putExtra(USER, user)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(this)
         }

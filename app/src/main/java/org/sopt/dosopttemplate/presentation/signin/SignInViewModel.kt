@@ -4,18 +4,35 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import org.sopt.dosopttemplate.domain.repo.AuthRepo
 import org.sopt.dosopttemplate.presentation.model.User
+import javax.inject.Inject
 
-class SignInViewModel() : ViewModel() {
+@HiltViewModel
+class SignInViewModel @Inject constructor(
+    private val authRepo: AuthRepo
+) : ViewModel() {
 
     private val _signInResult = MutableLiveData<SignInState>()
     val signInResult: LiveData<SignInState> get() = _signInResult
 
     private val _eventFlow = MutableSharedFlow<Event>()
     val eventFlow = _eventFlow.asSharedFlow()
+
+    fun signIn(user: User) {
+        authRepo.saveUser(user.toUserEntity())
+        authRepo.saveCheckLogin(true)
+    }
+    fun signOut(){
+        authRepo.clear()
+    }
+    fun getUser() = authRepo.getUser()
+
+    fun checkLogin() = authRepo.checkLogin()
 
     fun isCorrectUserInfo(user: User, regaxUser: User) {
         if (!checkIdCorrect(user.id, regaxUser.id) || !checkPwdCorrect(
