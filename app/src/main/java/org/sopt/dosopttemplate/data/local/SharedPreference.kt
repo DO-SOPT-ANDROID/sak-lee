@@ -13,15 +13,20 @@ class SharedPreference @Inject constructor(
     private val prefs: SharedPreferences,
 ) : SharedPreferenceMain {
 
-    private val userGson: Gson = GsonBuilder().create()
+    private val gson = GsonBuilder().create()
 
     override var user: UserEntity
-        get() = userGson.fromJson(prefs.getString("User", null), UserEntity::class.java)
-        set(value) = prefs.edit { putString("User", userGson.toJson(value)) }
+        get() = gson.fromJson(prefs.getString(USER, null), UserEntity::class.java)
+        set(value) = prefs.edit { putString(USER, gson.toJson(value)) }
 
     override var checkLogin: Boolean
-        get() = prefs.getBoolean("CheckLogin", false)
-        set(value) = prefs.edit { putBoolean("CheckLogin", value) }
+        get() = prefs.getBoolean(CHECKLOGIN, false)
+        set(value) = prefs.edit { putBoolean(CHECKLOGIN, value) }
 
     override fun clearPref() = prefs.edit { clear() }
+
+    companion object {
+        const val CHECKLOGIN = "CheckLogin"
+        const val USER = "User"
+    }
 }
