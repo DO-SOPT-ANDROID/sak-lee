@@ -6,7 +6,11 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivitySignInBinding
 import org.sopt.dosopttemplate.presentation.main.MainActivity
@@ -36,6 +40,7 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
         clickSignInBtn()
         clickSignUpBtn()
         collectSignUpEvent()
+        collectUser()
         setSignUpActivityLauncher()
         isCheckSignInResult()
 
@@ -71,7 +76,6 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
                         regaxUser.nickname
                     )
                 )
-                signInViewModel.isCorrectUserInfo(regaxUser)
             }
         }
 
@@ -80,6 +84,11 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
         }
     }
 
+    private fun collectUser(){
+        signInViewModel.user.flowWithLifecycle(lifecycle).onEach {
+            signInViewModel.isCorrectUserInfo(it)
+        }.launchIn(lifecycleScope)
+    }
     private fun navigateToSignUp() {
         Intent(this, SignUpActivity::class.java).apply {
             returnSignUpLauncher.launch(this)

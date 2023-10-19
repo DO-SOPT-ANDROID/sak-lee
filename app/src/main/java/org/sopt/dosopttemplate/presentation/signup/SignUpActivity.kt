@@ -3,6 +3,10 @@ package org.sopt.dosopttemplate.presentation.signup
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding
 import org.sopt.dosopttemplate.presentation.model.User
@@ -20,6 +24,7 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
         clickSignUpBtn()
         collectSignUpEvent()
         isCheckSignUpResult()
+        collectUser()
 
     }
 
@@ -46,10 +51,14 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
                     binding.etvNickname.text.toString()
                 )
             )
-            signUpViewModel.isCorrectUserInfo()
         }
     }
 
+    private fun collectUser(){
+        signUpViewModel.user.flowWithLifecycle(lifecycle).onEach {
+            signUpViewModel.isCorrectUserInfo()
+        }.launchIn(lifecycleScope)
+    }
     private fun isCheckSignUpResult() {
         signUpViewModel.signUpResult.observe(this@SignUpActivity) { signUpResult ->
             when (signUpResult) {
