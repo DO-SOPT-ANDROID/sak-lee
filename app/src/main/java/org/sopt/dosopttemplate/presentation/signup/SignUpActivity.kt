@@ -54,11 +54,12 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
         }
     }
 
-    private fun collectUser(){
+    private fun collectUser() {
         signUpViewModel.user.flowWithLifecycle(lifecycle).onEach {
             signUpViewModel.isCorrectUserInfo()
         }.launchIn(lifecycleScope)
     }
+
     private fun isCheckSignUpResult() {
         signUpViewModel.signUpResult.observe(this@SignUpActivity) { signUpResult ->
             when (signUpResult) {

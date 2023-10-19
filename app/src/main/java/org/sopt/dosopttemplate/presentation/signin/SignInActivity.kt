@@ -84,11 +84,12 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
         }
     }
 
-    private fun collectUser(){
+    private fun collectUser() {
         signInViewModel.user.flowWithLifecycle(lifecycle).onEach {
             signInViewModel.isCorrectUserInfo(it)
         }.launchIn(lifecycleScope)
     }
+
     private fun navigateToSignUp() {
         Intent(this, SignUpActivity::class.java).apply {
             returnSignUpLauncher.launch(this)
