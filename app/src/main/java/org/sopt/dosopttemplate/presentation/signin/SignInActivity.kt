@@ -21,7 +21,6 @@ import org.sopt.dosopttemplate.ui.context.toast
 @AndroidEntryPoint
 class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_sign_in) {
 
-    private lateinit var user: User
     private lateinit var regaxUser: User
     private lateinit var returnSignUpLauncher: ActivityResultLauncher<Intent>
     private val signInViewModel: SignInViewModel by viewModels()
@@ -64,13 +63,15 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
         is SignEvent.SignIn -> {
             if (!::regaxUser.isInitialized) snackBar(binding.root) { NEED_SIGN_UP_MSG }
             else {
-                user = User(
-                    binding.etvId.text.toString(),
-                    binding.etvPwd.text.toString(),
-                    regaxUser.sojuCount,
-                    regaxUser.nickname
+                signInViewModel.setUser(
+                    User(
+                        binding.etvId.text.toString(),
+                        binding.etvPwd.text.toString(),
+                        regaxUser.sojuCount,
+                        regaxUser.nickname
+                    )
                 )
-                signInViewModel.isCorrectUserInfo(user, regaxUser)
+                signInViewModel.isCorrectUserInfo(regaxUser)
             }
         }
 
@@ -101,7 +102,7 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
             when (signInResult) {
                 SignInState.SUCCESS -> {
                     toast(SUCCESS_SIGN_MSG)
-                    signInViewModel.signIn(user)
+                    signInViewModel.signIn()
                     navigateTo<MainActivity>()
                 }
 

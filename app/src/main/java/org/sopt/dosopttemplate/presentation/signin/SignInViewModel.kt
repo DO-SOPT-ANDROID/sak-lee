@@ -6,7 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.dosopttemplate.domain.repo.AuthRepo
 import org.sopt.dosopttemplate.presentation.model.User
@@ -23,13 +26,22 @@ class SignInViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<SignEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    fun signIn(user: User) {
-        authRepo.saveUser(user.toUserEntity())
+    private val _user = MutableStateFlow<User>(User())
+    val user: StateFlow<User> = _user.asStateFlow()
+
+    fun setUser(user: User) = viewModelScope.launch {
+        _user.value = user
+    }
+
+    fun signIn() {
+        authRepo.saveUser(user.value.toUserEntity())
         authRepo.saveCheckLogin(true)
     }
+
     fun checkLogin() = authRepo.checkLogin()
 
-    fun isCorrectUserInfo(user: User, regaxUser: User) {
+    fun isCorrectUserInfo(regaxUser: User) = viewModelScope.launch {
+        val user = user.value
         if (!checkIdCorrect(user.id, regaxUser.id) || !checkPwdCorrect(
                 user.pwd,
                 regaxUser.pwd
@@ -57,6 +69,5 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch { _eventFlow.emit(event) }
     }
 
-    //편하게 보세요
 }
 

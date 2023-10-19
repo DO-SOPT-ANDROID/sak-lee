@@ -13,7 +13,6 @@ import org.sopt.dosopttemplate.ui.context.toast
 
 class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_sign_up) {
 
-    private lateinit var user: User
     private val signUpViewModel: SignUpViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,15 +38,15 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
     private fun handleEvent(event: SignUpViewModel.Event) = when (event) {
         is SignUpViewModel.Event.SignUp -> {
             Log.d("내맘", "덤벼라 오비")
-            user = with(binding) {
+            signUpViewModel.setUser(
                 User(
-                    etvId.text.toString(),
-                    etvPwd.text.toString(),
-                    etvSojuCount.text.toString(),
-                    etvNickname.text.toString()
+                    binding.etvId.text.toString(),
+                    binding.etvPwd.text.toString(),
+                    binding.etvSojuCount.text.toString(),
+                    binding.etvNickname.text.toString()
                 )
-            }
-            signUpViewModel.isCorrectUserInfo(user)
+            )
+            signUpViewModel.isCorrectUserInfo()
         }
     }
 
@@ -55,7 +54,7 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
         signUpViewModel.signUpResult.observe(this@SignUpActivity) { signUpResult ->
             when (signUpResult) {
                 SignUpState.SUCCESS -> {
-                    navigateToLoginActivity(user)
+                    navigateToLoginActivity(signUpViewModel.user.value)
                     toast(SUCCESS_SIGN_MSG)
                 }
 
