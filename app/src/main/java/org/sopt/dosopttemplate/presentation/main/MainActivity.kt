@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         initView()
 
-        binding.ivUser.setOnClickListener {
+        binding.btnLogout.setOnClickListener {
             signInViewModel.signOut()
             Intent(this@MainActivity, SignInActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
