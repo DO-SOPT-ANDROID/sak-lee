@@ -22,9 +22,9 @@ class MainActivity : AppCompatActivity() {
     private var back: Long = 0
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (System.currentTimeMillis() - back >= 2000) {
+            if (System.currentTimeMillis() - back >= BACKTIME) {
                 back = System.currentTimeMillis()
-                toast("한번 더 종료")
+                toast(BACK_TOAST)
             } else {
                 finish()
             }
@@ -80,4 +80,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    companion object {
+        const val BACKTIME = 2000
+        const val BACK_TOAST = "한번 더 종료"
+    }
 }
