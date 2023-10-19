@@ -60,8 +60,8 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
         }
     }
 
-    private fun handleEvent(event: SignInViewModel.Event) = when (event) {
-        is SignInViewModel.Event.SignIn -> {
+    private fun handleEvent(event: SignEvent) = when (event) {
+        is SignEvent.SignIn -> {
             if (!::regaxUser.isInitialized) snackBar(binding.root) { NEED_SIGN_UP_MSG }
             else {
                 user = User(
@@ -74,7 +74,7 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
             }
         }
 
-        is SignInViewModel.Event.NavigateSignUp -> {
+        is SignEvent.NavigateSignUp -> {
             navigateToSignUp()
         }
     }
@@ -103,7 +103,6 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
                     toast(SUCCESS_SIGN_MSG)
                     signInViewModel.signIn(user)
                     navigateTo<MainActivity>()
-                    finish()
                 }
 
                 SignInState.FAIL -> snackBar(binding.root) { FAIL_MSG }

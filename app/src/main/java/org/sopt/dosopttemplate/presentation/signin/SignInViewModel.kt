@@ -20,18 +20,13 @@ class SignInViewModel @Inject constructor(
     private val _signInResult = MutableLiveData<SignInState>()
     val signInResult: LiveData<SignInState> get() = _signInResult
 
-    private val _eventFlow = MutableSharedFlow<Event>()
+    private val _eventFlow = MutableSharedFlow<SignEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     fun signIn(user: User) {
         authRepo.saveUser(user.toUserEntity())
         authRepo.saveCheckLogin(true)
     }
-    fun signOut(){
-        authRepo.clear()
-    }
-    fun getUser() = authRepo.getUser()
-
     fun checkLogin() = authRepo.checkLogin()
 
     fun isCorrectUserInfo(user: User, regaxUser: User) {
@@ -51,26 +46,17 @@ class SignInViewModel @Inject constructor(
         pwd == regaxPwd
 
     fun signInEvent() {
-        event(Event.SignIn(Unit))
+        event(SignEvent.SignIn(Unit))
     }
 
     fun navigateSignUpEvent() {
-        event(Event.NavigateSignUp(Unit))
+        event(SignEvent.NavigateSignUp(Unit))
     }
 
-    private fun event(event: Event) {
+    private fun event(event: SignEvent) {
         viewModelScope.launch { _eventFlow.emit(event) }
     }
 
     //편하게 보세요
-    sealed class Event {
-        data class SignIn(val p: Unit) : Event()
-        data class NavigateSignUp(val p: Unit) : Event()
-    }
 }
 
-enum class SignInState {
-    SUCCESS,
-    FAIL,
-    EMPTY,
-}
