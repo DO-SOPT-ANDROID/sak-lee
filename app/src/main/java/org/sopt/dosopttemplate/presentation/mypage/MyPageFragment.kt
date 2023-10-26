@@ -8,8 +8,6 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.FragmentMypageBinding
-import org.sopt.dosopttemplate.presentation.main.MainEvent
-import org.sopt.dosopttemplate.presentation.main.MainViewModel
 import org.sopt.dosopttemplate.presentation.signin.SignInActivity
 import org.sopt.dosopttemplate.ui.base.BindingFragment
 import org.sopt.dosopttemplate.ui.context.repeatOnStarted
@@ -18,7 +16,7 @@ import org.sopt.dosopttemplate.ui.context.repeatOnStarted
 @AndroidEntryPoint
 class MyPageFragment : BindingFragment<FragmentMypageBinding>(R.layout.fragment_mypage) {
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val myPageViewModel: MyPageViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,12 +29,12 @@ class MyPageFragment : BindingFragment<FragmentMypageBinding>(R.layout.fragment_
 
     private fun clickBtnLogout() {
         binding.btnLogout.setOnClickListener {
-            mainViewModel.logoutEvent()
+            myPageViewModel.logoutEvent()
         }
     }
 
     private fun initView() {
-        val user = mainViewModel.getUser()
+        val user = myPageViewModel.getUser()
 
         with(binding) {
             tvId.text = user?.id
@@ -47,13 +45,13 @@ class MyPageFragment : BindingFragment<FragmentMypageBinding>(R.layout.fragment_
 
     private fun collectMainEvent() {
         repeatOnStarted {
-            mainViewModel.eventFlow.collect(::handleEvent)
+            myPageViewModel.eventFlow.collect(::handleEvent)
         }
     }
 
-    private fun handleEvent(event: MainEvent) = when (event) {
-        is MainEvent.LogOut -> {
-            mainViewModel.signOut()
+    private fun handleEvent(event: MyPageEvent) = when (event) {
+        is MyPageEvent.LogOut -> {
+            myPageViewModel.signOut()
             navigateTo<SignInActivity>()
         }
 
@@ -66,8 +64,4 @@ class MyPageFragment : BindingFragment<FragmentMypageBinding>(R.layout.fragment_
         }
     }
 
-    companion object {
-        const val BACKTIME = 2000
-        const val BACK_TOAST = "한번 더 종료"
-    }
 }
