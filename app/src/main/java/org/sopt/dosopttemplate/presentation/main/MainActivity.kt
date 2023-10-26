@@ -35,29 +35,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         this.onBackPressedDispatcher.addCallback(this, callback)
 
+        setNav()
+    }
+
+    private fun setNav() {
         val navController =
             supportFragmentManager.findFragmentById(R.id.fragment_container_main)
-                ?.findNavController()!!
+                ?.findNavController()
 
         with(binding) {
-            bottomNavigationMain.itemIconTintList = null
             navController?.let { NavController ->
                 bottomNavigationMain.setupWithNavController(NavController)
             }
-        }
-
-        setBottomVisible(navController)
-    }
-
-    private fun setBottomVisible(navController: NavController) {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.bottomNavigationMain.visibility = if (destination.id in listOf(
-                    R.id.navigation_home,
-                    R.id.navigation_do_android,
-                    R.id.navigation_my_page,
-                )
-            ) View.VISIBLE else View.GONE
-
         }
     }
 
