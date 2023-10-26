@@ -4,20 +4,44 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.sopt.dosopttemplate.domain.repo.AuthRepo
 import org.sopt.dosopttemplate.presentation.model.User
+import javax.inject.Inject
 
-class SignInViewModel() : ViewModel() {
+@HiltViewModel
+class SignInViewModel @Inject constructor(
+    private val authRepo: AuthRepo
+) : ViewModel() {
 
     private val _signInResult = MutableLiveData<SignInState>()
     val signInResult: LiveData<SignInState> get() = _signInResult
 
-    private val _eventFlow = MutableSharedFlow<Event>()
+    private val _eventFlow = MutableSharedFlow<SignEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    fun isCorrectUserInfo(user: User, regaxUser: User) {
+    private val _user = MutableStateFlow<User>(User())
+    val user: StateFlow<User> = _user.asStateFlow()
+
+    fun setUser(user: User) = viewModelScope.launch {
+        _user.value = user
+    }
+
+    fun signIn() {
+        authRepo.saveUser(user.value.toUserEntity())
+        authRepo.saveCheckLogin(true)
+    }
+
+    fun checkLogin() = authRepo.checkLogin()
+
+    fun isCorrectUserInfo(regaxUser: User) = viewModelScope.launch {
+        val user = user.value
         if (!checkIdCorrect(user.id, regaxUser.id) || !checkPwdCorrect(
                 user.pwd,
                 regaxUser.pwd
@@ -34,26 +58,16 @@ class SignInViewModel() : ViewModel() {
         pwd == regaxPwd
 
     fun signInEvent() {
-        event(Event.SignIn(Unit))
+        event(SignEvent.SignIn(Unit))
     }
 
     fun navigateSignUpEvent() {
-        event(Event.NavigateSignUp(Unit))
+        event(SignEvent.NavigateSignUp(Unit))
     }
 
-    private fun event(event: Event) {
+    private fun event(event: SignEvent) {
         viewModelScope.launch { _eventFlow.emit(event) }
     }
 
-    //편하게 보세요
-    sealed class Event {
-        data class SignIn(val p: Unit) : Event()
-        data class NavigateSignUp(val p: Unit) : Event()
-    }
 }
 
-enum class SignInState {
-    SUCCESS,
-    FAIL,
-    EMPTY,
-}

@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/etv_sign_in_id"
             android:textSize="30sp"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_id_title" />

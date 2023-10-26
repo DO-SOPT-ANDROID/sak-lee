@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.dosopttemplate.presentation.model.User
 
@@ -17,19 +20,29 @@ class SignUpViewModel() : ViewModel() {
     private val _eventFlow = MutableSharedFlow<Event>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    fun isCorrectUserInfo(user: User) {
-        if (!isValid(user)) _signUpResult.postValue(SignUpState.EMPTY)
-        else if (!checkIdLength(user.id) || !checkPwLength(user.pwd) || !isValidNickname(user.nickname)) _signUpResult.postValue(
-            SignUpState.FAIL
-        )
-        else _signUpResult.postValue(SignUpState.SUCCESS)
+    private val _user = MutableStateFlow<User>(User())
+    val user: StateFlow<User> = _user.asStateFlow()
+
+    fun setUser(user: User) = viewModelScope.launch {
+        _user.value = user
     }
+
+    fun isCorrectUserInfo() =
+        viewModelScope.launch {
+            val user = user.value
+            if (!isValid(user))
+                _signUpResult.postValue(SignUpState.EMPTY)
+            else if (!checkIdLength(user.id) || !checkPwLength(user.pwd) || !isValidNickname(user.nickname))
+                _signUpResult.postValue(SignUpState.FAIL)
+            else _signUpResult.postValue(SignUpState.SUCCESS)
+        }
+
 
     private fun checkIdLength(id: String) =
         id.isBlank() || id.length in 6..10
 
-    private fun checkPwLength(pw: String) =
-        pw.isBlank() || pw.length in 8..12
+    private fun checkPwLength(pwd: String) =
+        pwd.isBlank() || pwd.length in 8..12
 
     private fun isValid(user: User) =
         user.id.isNotBlank() && user.pwd.isNotBlank() && user.nickname.isNotBlank() && user.sojuCount.isNotBlank()

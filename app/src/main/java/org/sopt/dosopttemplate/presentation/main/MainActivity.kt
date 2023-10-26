@@ -1,27 +1,56 @@
 package org.sopt.dosopttemplate.presentation.main
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivityMainBinding
-import org.sopt.dosopttemplate.presentation.model.User
-import org.sopt.dosopttemplate.presentation.signin.SignInActivity.Companion.USER
-import org.sopt.dosopttemplate.ui.context.getParcelable
+import org.sopt.dosopttemplate.presentation.signin.SignInActivity
+import org.sopt.dosopttemplate.ui.context.repeatOnStarted
+import org.sopt.dosopttemplate.ui.context.toast
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val mainViewModel: MainViewModel by viewModels()
+    private var back: Long = 0
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (System.currentTimeMillis() - back >= BACKTIME) {
+                back = System.currentTimeMillis()
+                toast(BACK_TOAST)
+            } else {
+                finish()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setContentView(binding.root)
+        this.onBackPressedDispatcher.addCallback(this, callback)
 
         initView()
+        collectMainEvent()
+        clickBtnLogout()
+
+    }
+
+    private fun clickBtnLogout() {
+        binding.btnLogout.setOnClickListener {
+            mainViewModel.logoutEvent()
+        }
     }
 
     private fun initView() {
-        val user = intent.getParcelable(USER, User::class.java)
+        val user = mainViewModel.getUser()
 
         with(binding) {
             tvId.text = user?.id
@@ -30,4 +59,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun collectMainEvent() {
+        repeatOnStarted {
+            mainViewModel.eventFlow.collect(::handleEvent)
+        }
+    }
+
+    private fun handleEvent(event: MainEvent) = when (event) {
+        is MainEvent.LogOut -> {
+            mainViewModel.signOut()
+            navigateTo<SignInActivity>()
+        }
+
+    }
+
+    private inline fun <reified T : Activity> navigateTo() {
+        Intent(this@MainActivity, T::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(this)
+        }
+    }
+
+    companion object {
+        const val BACKTIME = 2000
+        const val BACK_TOAST = "한번 더 종료"
+    }
 }

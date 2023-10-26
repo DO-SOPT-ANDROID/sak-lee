@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/etv_sign_up_id"
             android:textSize="20sp"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_id_title" />
@@ -58,6 +59,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/etv_sign_up_pwd"
             android:textSize="20sp"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_pwd_title" />
@@ -78,6 +80,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/etv_sign_up_nickname"
             android:textSize="20sp"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
@@ -98,6 +101,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/etv_sign_up_soju"
             android:textSize="20sp"
+            android:inputType="number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_soju_count" />
