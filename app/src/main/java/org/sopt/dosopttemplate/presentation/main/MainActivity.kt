@@ -1,24 +1,22 @@
 package org.sopt.dosopttemplate.presentation.main
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivityMainBinding
-import org.sopt.dosopttemplate.presentation.signin.SignInActivity
-import org.sopt.dosopttemplate.ui.context.repeatOnStarted
 import org.sopt.dosopttemplate.ui.context.toast
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val mainViewModel: MainViewModel by viewModels()
     private var back: Long = 0
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -37,48 +35,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         this.onBackPressedDispatcher.addCallback(this, callback)
 
-        initView()
-        collectMainEvent()
-        clickBtnLogout()
-
+        setNav()
     }
 
-    private fun clickBtnLogout() {
-        binding.btnLogout.setOnClickListener {
-            mainViewModel.logoutEvent()
-        }
-    }
-
-    private fun initView() {
-        val user = mainViewModel.getUser()
+    private fun setNav() {
+        val navController =
+            supportFragmentManager.findFragmentById(R.id.fragment_container_main)
+                ?.findNavController()
 
         with(binding) {
-            tvId.text = user?.id
-            tvSojuCount.text = user?.sojuCount
-            tvNickname.text = user?.nickname
+            navController?.let { NavController ->
+                bottomNavigationMain.setupWithNavController(NavController)
+            }
         }
     }
 
-    private fun collectMainEvent() {
-        repeatOnStarted {
-            mainViewModel.eventFlow.collect(::handleEvent)
-        }
-    }
-
-    private fun handleEvent(event: MainEvent) = when (event) {
-        is MainEvent.LogOut -> {
-            mainViewModel.signOut()
-            navigateTo<SignInActivity>()
-        }
-
-    }
-
-    private inline fun <reified T : Activity> navigateTo() {
-        Intent(this@MainActivity, T::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(this)
-        }
-    }
 
     companion object {
         const val BACKTIME = 2000

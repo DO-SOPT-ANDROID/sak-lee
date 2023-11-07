@@ -20,4 +20,7 @@
     <string name="tv_sign_up_soju">주량</string>
     <string name="etv_sign_up_soju">주량 입력</string>
     <string name="btn_sign_up_sign_up">회원가입</string>
+    <string name="nav_home">홈</string>
+    <string name="nav_android">두안드로이드</string>
+    <string name="nav_my_page">my page</string>
 </resources>
