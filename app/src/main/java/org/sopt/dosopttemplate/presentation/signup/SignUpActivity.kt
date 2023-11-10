@@ -68,7 +68,12 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
                     toast(SUCCESS_SIGN_MSG)
                 }
 
-                SignUpState.FAIL -> snackBar(binding.root) { FAIL_MSG }
+                SignUpState.FAIL -> {
+                    snackBar(binding.root) { FAIL_MSG }
+                    binding.tfId.error = FAIL_MSG
+                    binding.tfPwd.error = FAIL_MSG
+                }
+
                 SignUpState.EMPTY -> snackBar(binding.root) { EMPTY_MSG }
             }
         }
