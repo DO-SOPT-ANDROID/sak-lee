@@ -6,6 +6,9 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     namespace 'org.sopt.dosopttemplate'
     compileSdk 33
@@ -18,6 +21,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "AUTH_BASE_URL", properties["auth.base.url"]
     }
 
     buildTypes {
@@ -36,6 +40,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 }
 
@@ -64,4 +69,12 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
 
     implementation "io.coil-kt:coil:2.3.0"
+
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+    implementation "com.squareup.okhttp3:okhttp"
+    implementation "com.squareup.okhttp3:logging-interceptor"
+
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0"
 }
