@@ -1,5 +1,8 @@
 package org.sopt.dosopttemplate.domain.repo
 
+import org.sopt.dosopttemplate.data.model.request.RequestSignInDto
+import org.sopt.dosopttemplate.data.model.request.RequestSignUpDto
+import org.sopt.dosopttemplate.data.model.response.ResponseUserInfoDto
 import org.sopt.dosopttemplate.domain.entity.UserEntity
 
 interface AuthRepo {
@@ -13,4 +16,7 @@ interface AuthRepo {
     fun saveCheckLogin(checkLogin: Boolean)
 
     fun clear()
+
+    suspend fun signUp(requestSignUpDto: RequestSignUpDto):Result<Unit>
+    suspend fun signIn(requestSignInDto: RequestSignInDto):Result<ResponseUserInfoDto?>
 }

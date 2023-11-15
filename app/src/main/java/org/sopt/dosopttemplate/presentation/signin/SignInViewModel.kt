@@ -1,5 +1,6 @@
 package org.sopt.dosopttemplate.presentation.signin
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.sopt.dosopttemplate.data.model.request.RequestSignInDto
+import org.sopt.dosopttemplate.domain.entity.UserEntity
 import org.sopt.dosopttemplate.domain.repo.AuthRepo
 import org.sopt.dosopttemplate.presentation.model.User
 import javax.inject.Inject
@@ -26,39 +29,38 @@ class SignInViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<SignEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private val _user = MutableStateFlow<User>(User())
-    val user: StateFlow<User> = _user.asStateFlow()
-
-    fun setUser(user: User) = viewModelScope.launch {
-        _user.value = user
+    fun signIn(requestSignInDto: RequestSignInDto) {
+        viewModelScope.launch {
+            authRepo.signIn(requestSignInDto)
+                .onSuccess {
+                    signInSuccessEvent()
+                    Log.d("success", "$it")
+                }
+                .onFailure {
+                    Log.d("fail", "$it")
+                    _signInResult.postValue(SignInState.FAIL)
+                }
+        }
     }
 
-    fun signIn() {
-        authRepo.saveUser(user.value.toUserEntity())
+    fun signInSuccess() {
         authRepo.saveCheckLogin(true)
     }
 
     fun checkLogin() = authRepo.checkLogin()
 
-    fun isCorrectUserInfo(regaxUser: User) = viewModelScope.launch {
-        val user = user.value
-        if (!checkIdCorrect(user.id, regaxUser.id) || !checkPwdCorrect(
-                user.pwd,
-                regaxUser.pwd
-            )
-        ) _signInResult.postValue(SignInState.FAIL)
-        else if (user.id.isBlank() || user.pwd.isBlank()) _signInResult.postValue(SignInState.EMPTY)
+    fun isCorrectUserInfo(id:String,pwd:String) = viewModelScope.launch {
+        if (id.isBlank() || pwd.isBlank()) _signInResult.postValue(SignInState.EMPTY)
         else _signInResult.postValue(SignInState.SUCCESS)
     }
 
-    private fun checkIdCorrect(id: String, regaxId: String) =
-        id == regaxId
-
-    private fun checkPwdCorrect(pwd: String, regaxPwd: String) =
-        pwd == regaxPwd
 
     fun signInEvent() {
         event(SignEvent.SignIn(Unit))
+    }
+
+    fun signInSuccessEvent() {
+        event(SignEvent.SignInSuccess(Unit))
     }
 
     fun navigateSignUpEvent() {

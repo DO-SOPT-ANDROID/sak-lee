@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 data class ResponseUserInfoDto(
     @SerialName("id") val id: Long,
     @SerialName("username") val userName: String,
-    @SerialName("nickname") val nickName: String
+    @SerialName("nickname") val nickName: String,
 )

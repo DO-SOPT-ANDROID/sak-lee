@@ -12,7 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONArray
 import org.json.JSONObject
-import org.sopt.dosopttemplate.BuildConfig
+import org.sopt.dosopttemplate.BuildConfig.AUTH_BASE_URL
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -50,9 +50,9 @@ class NetworkModule {
     @Singleton
     @Provides
     @Sopt
-    fun provideVelogRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+    fun provideSoptRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl(AUTH_BASE_URL)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-        .baseUrl(BuildConfig.AUTH_BASE_URL)
         .client(okHttpClient)
         .build()
 }

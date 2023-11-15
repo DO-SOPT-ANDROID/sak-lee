@@ -5,16 +5,20 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.dosopttemplate.R
+import org.sopt.dosopttemplate.data.model.request.RequestSignUpDto
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding
+import org.sopt.dosopttemplate.domain.entity.UserEntity
 import org.sopt.dosopttemplate.presentation.model.User
 import org.sopt.dosopttemplate.ui.base.BindingActivity
 import org.sopt.dosopttemplate.ui.context.repeatOnStarted
 import org.sopt.dosopttemplate.ui.context.snackBar
 import org.sopt.dosopttemplate.ui.context.toast
 
+@AndroidEntryPoint
 class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_sign_up) {
 
     private val signUpViewModel: SignUpViewModel by viewModels()
@@ -43,14 +47,19 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
     private fun handleEvent(event: SignUpViewModel.Event) = when (event) {
         is SignUpViewModel.Event.SignUp -> {
             Log.d("내맘", "덤벼라 오비")
-            signUpViewModel.setUser(
-                User(
+            signUpViewModel.saveUser(
+                UserEntity(
                     binding.etvId.text.toString(),
                     binding.etvPwd.text.toString(),
                     binding.etvSojuCount.text.toString(),
                     binding.etvNickname.text.toString()
                 )
             )
+        }
+
+        is SignUpViewModel.Event.SignUpSuccess -> {
+            Log.d("test2","test")
+            navigateToLoginActivity()
         }
     }
 
@@ -64,7 +73,13 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
         signUpViewModel.signUpResult.observe(this@SignUpActivity) { signUpResult ->
             when (signUpResult) {
                 SignUpState.SUCCESS -> {
-                    navigateToLoginActivity(signUpViewModel.user.value)
+                    signUpViewModel.signUp(
+                        RequestSignUpDto(
+                            binding.etvId.text.toString(),
+                            binding.etvNickname.text.toString(),
+                            binding.etvPwd.text.toString(),
+                        )
+                    )
                     toast(SUCCESS_SIGN_MSG)
                 }
 
@@ -79,9 +94,7 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
         }
     }
 
-    private fun navigateToLoginActivity(usel: User) {
-        intent.putExtra(USER, usel)
-        setResult(RESULT_OK, intent)
+    private fun navigateToLoginActivity() {
         finish()
     }
 
