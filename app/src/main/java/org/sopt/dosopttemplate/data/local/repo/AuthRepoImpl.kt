@@ -1,6 +1,5 @@
 package org.sopt.dosopttemplate.data.local.repo
 
-import android.util.Log
 import org.sopt.dosopttemplate.data.local.SharedPreferenceImpl
 import org.sopt.dosopttemplate.data.model.request.RequestSignInDto
 import org.sopt.dosopttemplate.data.model.request.RequestSignUpDto
@@ -29,9 +28,7 @@ class AuthRepoImpl @Inject constructor(
     }
 
     override suspend fun signUp(requestSignUpDto: RequestSignUpDto): Result<Unit> =
-        runCatching {
-            authDataSource.signUp(requestSignUpDto)
-        }
+        runCatching { authDataSource.signUp(requestSignUpDto) }
 
     override suspend fun signIn(requestSignInDto: RequestSignInDto): Result<ResponseUserInfoDto?> =
         runCatching { authDataSource.signIn(requestSignInDto) }

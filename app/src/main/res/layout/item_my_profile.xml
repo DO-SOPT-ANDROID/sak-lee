@@ -7,7 +7,7 @@
 
         <variable
             name="profile"
-            type="org.sopt.dosopttemplate.presentation.model.MyProfile" />
+            type="org.sopt.dosopttemplate.data.model.response.ResponseUserListDto.ResponseReqresUserDto" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +16,7 @@
 
         <ImageView
             android:id="@+id/iv_profile"
-            imageUrl="@{profile.picture}"
+            imageUrl="@{profile.avatar}"
             android:layout_width="100dp"
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="1"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="@{profile.name}"
+            android:text="@{profile.last_name}"
             android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="@id/iv_profile"
             app:layout_constraintStart_toEndOf="@+id/iv_profile"

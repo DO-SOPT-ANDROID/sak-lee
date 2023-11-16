@@ -12,7 +12,6 @@ import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.data.model.request.RequestSignUpDto
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding
 import org.sopt.dosopttemplate.domain.entity.UserEntity
-import org.sopt.dosopttemplate.presentation.model.User
 import org.sopt.dosopttemplate.ui.base.BindingActivity
 import org.sopt.dosopttemplate.ui.context.repeatOnStarted
 import org.sopt.dosopttemplate.ui.context.snackBar
@@ -46,7 +45,6 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
 
     private fun handleEvent(event: SignUpViewModel.Event) = when (event) {
         is SignUpViewModel.Event.SignUp -> {
-            Log.d("내맘", "덤벼라 오비")
             signUpViewModel.saveUser(
                 UserEntity(
                     binding.etvId.text.toString(),
@@ -58,7 +56,6 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
         }
 
         is SignUpViewModel.Event.SignUpSuccess -> {
-            Log.d("test2","test")
             navigateToLoginActivity()
         }
     }
@@ -99,7 +96,6 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
     }
 
     companion object {
-        const val USER = "USER"
         const val SUCCESS_SIGN_MSG = "회원가입 성공"
         const val FAIL_MSG = "아디나 비번 길이 안맞음"
         const val EMPTY_MSG = "모든 값을 입력"

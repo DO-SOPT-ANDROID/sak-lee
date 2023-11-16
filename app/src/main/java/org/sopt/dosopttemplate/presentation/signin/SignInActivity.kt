@@ -23,10 +23,10 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
     private lateinit var returnSignUpLauncher: ActivityResultLauncher<Intent>
     private val signInViewModel: SignInViewModel by viewModels()
 
-    override fun onStart() {
-        if (signInViewModel.checkLogin()) navigateTo<MainActivity>()
-        super.onStart()
-    }
+//    override fun onStart() {
+//        if (signInViewModel.checkLogin()) navigateTo<MainActivity>()
+//        super.onStart()
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +88,6 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK) {
-
             }
         }
     }
