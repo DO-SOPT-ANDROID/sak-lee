@@ -6,18 +6,13 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.sopt.dosopttemplate.R
+import org.sopt.dosopttemplate.data.model.request.RequestSignInDto
 import org.sopt.dosopttemplate.databinding.ActivitySignInBinding
 import org.sopt.dosopttemplate.presentation.main.MainActivity
-import org.sopt.dosopttemplate.presentation.model.User
 import org.sopt.dosopttemplate.presentation.signup.SignUpActivity
 import org.sopt.dosopttemplate.ui.base.BindingActivity
-import org.sopt.dosopttemplate.ui.context.getParcelable
 import org.sopt.dosopttemplate.ui.context.repeatOnStarted
 import org.sopt.dosopttemplate.ui.context.snackBar
 import org.sopt.dosopttemplate.ui.context.toast
@@ -25,14 +20,13 @@ import org.sopt.dosopttemplate.ui.context.toast
 @AndroidEntryPoint
 class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_sign_in) {
 
-    private lateinit var regaxUser: User
     private lateinit var returnSignUpLauncher: ActivityResultLauncher<Intent>
     private val signInViewModel: SignInViewModel by viewModels()
 
-    override fun onStart() {
-        if (signInViewModel.checkLogin()) navigateTo<MainActivity>()
-        super.onStart()
-    }
+//    override fun onStart() {
+//        if (signInViewModel.checkLogin()) navigateTo<MainActivity>()
+//        super.onStart()
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +34,6 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
         clickSignInBtn()
         clickSignUpBtn()
         collectSignUpEvent()
-        collectUser()
         setSignUpActivityLauncher()
         isCheckSignInResult()
 
@@ -66,17 +59,16 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
 
     private fun handleEvent(event: SignEvent) = when (event) {
         is SignEvent.SignIn -> {
-            if (!::regaxUser.isInitialized) snackBar(binding.root) { NEED_SIGN_UP_MSG }
-            else {
-                signInViewModel.setUser(
-                    User(
-                        binding.etvId.text.toString(),
-                        binding.etvPwd.text.toString(),
-                        regaxUser.sojuCount,
-                        regaxUser.nickname
-                    )
-                )
-            }
+            signInViewModel.isCorrectUserInfo(
+                binding.etvId.text.toString(),
+                binding.etvPwd.text.toString()
+            )
+        }
+
+        is SignEvent.SignInSuccess -> {
+            toast(SUCCESS_SIGN_MSG)
+            signInViewModel.signInSuccess()
+            navigateTo<MainActivity>()
         }
 
         is SignEvent.NavigateSignUp -> {
@@ -84,11 +76,6 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
         }
     }
 
-    private fun collectUser() {
-        signInViewModel.user.flowWithLifecycle(lifecycle).onEach {
-            signInViewModel.isCorrectUserInfo(it)
-        }.launchIn(lifecycleScope)
-    }
 
     private fun navigateToSignUp() {
         Intent(this, SignUpActivity::class.java).apply {
@@ -101,8 +88,6 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK) {
-                regaxUser = result.data?.getParcelable(USER, User::class.java)
-                    ?: return@registerForActivityResult
             }
         }
     }
@@ -111,9 +96,12 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
         signInViewModel.signInResult.observe(this@SignInActivity) { signInResult ->
             when (signInResult) {
                 SignInState.SUCCESS -> {
-                    toast(SUCCESS_SIGN_MSG)
-                    signInViewModel.signIn()
-                    navigateTo<MainActivity>()
+                    signInViewModel.signIn(
+                        RequestSignInDto(
+                            binding.etvId.text.toString(),
+                            binding.etvPwd.text.toString()
+                        )
+                    )
                 }
 
                 SignInState.FAIL -> snackBar(binding.root) { FAIL_MSG }
@@ -130,11 +118,9 @@ class SignInActivity : BindingActivity<ActivitySignInBinding>(R.layout.activity_
     }
 
     companion object {
-        const val USER = "USER"
         const val SUCCESS_SIGN_MSG = "로그인 성공"
         const val FAIL_MSG = "아디나 비번 다름"
         const val EMPTY_MSG = "비었음"
-        const val NEED_SIGN_UP_MSG = "먼저 회원가입"
     }
 
 }
