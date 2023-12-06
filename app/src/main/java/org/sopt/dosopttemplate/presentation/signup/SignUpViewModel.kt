@@ -46,7 +46,7 @@ class SignUpViewModel @Inject constructor(
         when {
             isValidId(id.value ?: "").not() -> LoginFormState(idError = "ID_REGEX_MSG")
             isValidPwd(pwd.value ?: "").not() -> LoginFormState(pwError = "PWD_REGEX_MSG")
-            isValidNickname(nickname.value ?: "") -> LoginFormState(isDataValid = false)
+            isValidNickname(nickname.value ?: "").not() -> LoginFormState(isDataValid = false)
             else -> LoginFormState(isDataValid = true)
         }
     }
@@ -125,7 +125,7 @@ class SignUpViewModel @Inject constructor(
         private val ID_PATTERN = """^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,10}""".toRegex()
         private val PASSWORD_PATTERN =
             """^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#%^&*()])[a-zA-Z0-9!@#%^&*()]{6,12}""".toRegex()
-        private val NICKNAME_PATTERN = """^(?!\s+$).{1,}$""".toRegex()
+        private val NICKNAME_PATTERN = """^(?!\s+$).{2,}""".toRegex()
     }
 }
 
