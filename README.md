@@ -6,6 +6,8 @@ ex) [1주차 도전 과제 노션 링크](https://council.busan.go.kr/council/fr
 
 [1주차 심화 과제 노션 링크 생명주기](https://bitter-latency-758.notion.site/EditText-f990fe703d6342dc81c15f6c6511e26a?pvs=4)
 [1주차 도전 과제 노션 링크 intent](https://bitter-latency-758.notion.site/iNTEN_T-saKleE-4540d5bd3f3a4c61b2a2fb4086ee5921?pvs=4)
+
+[6주차 클린아키텍쳐](https://bitter-latency-758.notion.site/Clean-Architecture-96a6f7f4aad14bba92cc896be074a564?pvs=4)
 ## 템플릿 설명
 레포지터리에는 하나의 브랜치가 있습니다.
 
