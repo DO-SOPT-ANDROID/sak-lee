@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="vm"
+            type="org.sopt.dosopttemplate.presentation.signup.SignUpViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,19 +41,24 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:errorEnabled="@{vm.loginFormState.idError != null }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_id_title">
+            app:layout_constraintTop_toBottomOf="@id/tv_id_title"
+            tools:error="@{vm.loginFormState.idError}">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etv_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:afterTextChanged="@{(text) -> vm.loginDataChanged()}"
                 android:hint="@string/etv_sign_up_id"
-                android:textSize="20sp"
-                android:inputType="text" />
+                android:inputType="text"
+                android:text="@={vm.id}"
+                android:textSize="20sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/tv_pwd_title"
             android:layout_width="wrap_content"
@@ -66,19 +74,24 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:errorEnabled="@{vm.loginFormState.pwError != null }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_pwd_title">
+            app:layout_constraintTop_toBottomOf="@id/tv_pwd_title"
+            tools:error="@{vm.loginFormState.pwError}">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etv_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:afterTextChanged="@{(text) -> vm.loginDataChanged()}"
                 android:hint="@string/etv_sign_up_pwd"
-                android:textSize="20sp"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:text="@={vm.pwd}"
+                android:textSize="20sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
@@ -94,8 +107,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/etv_sign_up_nickname"
-            android:textSize="20sp"
             android:inputType="text"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
@@ -125,9 +138,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/etv_sign_up_soju"
-                android:textSize="20sp"
+                android:imeOptions="actionNext"
                 android:inputType="number"
-                android:imeOptions="actionNext" />
+                android:textSize="20sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,6 +148,8 @@
             android:id="@+id/btn_sign_in"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@{vm.loginFormState.dataValid ? @color/blue : @color/black}"
+            android:enabled="@{vm.loginFormState.dataValid}"
             android:text="@string/btn_sign_up_sign_up"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
