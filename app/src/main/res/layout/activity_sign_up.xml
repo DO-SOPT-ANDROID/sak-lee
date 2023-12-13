@@ -5,142 +5,182 @@
 
     <data>
 
+        <variable
+            name="vm"
+            type="org.sopt.dosopttemplate.presentation.signup.SignUpViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="30dp"
-        android:paddingVertical="30dp">
+        android:paddingBottom="30dp">
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_sign_up_title"
-            android:textSize="25sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_id_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="@string/tv_sign_up_id_title"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_title" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tf_id"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_id_title">
+            app:layout_constraintBottom_toTopOf="@id/btn_sign_in"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etv_id"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/etv_sign_up_id"
-                android:textSize="20sp"
-                android:inputType="text" />
+                android:layout_height="wrap_content">
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <TextView
-            android:id="@+id/tv_pwd_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/tv_sign_up_pwd"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tf_id" />
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_sign_up_title"
+                    android:textSize="25sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tf_pwd"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_pwd_title">
+                <TextView
+                    android:id="@+id/tv_id_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/tv_sign_up_id_title"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etv_pwd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/etv_sign_up_pwd"
-                android:textSize="20sp"
-                android:inputType="text"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tf_id"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="@{vm.loginFormState.idError != null }"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_id_title"
+                    tools:error="@{vm.loginFormState.idError}">
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <TextView
-            android:id="@+id/tv_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/tv_sign_up_nickname"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tf_pwd" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etv_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:afterTextChanged="@{(text) -> vm.loginDataChanged()}"
+                        android:hint="@string/etv_sign_up_id"
+                        android:inputType="text"
+                        android:text="@={vm.id}"
+                        android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/etv_nickname"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/etv_sign_up_nickname"
-            android:textSize="20sp"
-            android:inputType="text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/tv_soju_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/tv_sign_up_soju"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etv_nickname" />
+                <TextView
+                    android:id="@+id/tv_pwd_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/tv_sign_up_pwd"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tf_id" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tf_pwd"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="@{vm.loginFormState.pwError != null }"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_pwd_title"
+                    tools:error="@{vm.loginFormState.pwError}">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etv_pwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:afterTextChanged="@{(text) -> vm.loginDataChanged()}"
+                        android:hint="@string/etv_sign_up_pwd"
+                        android:inputType="text"
+                        android:text="@={vm.pwd}"
+                        android:textSize="20sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/tv_sign_up_nickname"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tf_pwd" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tf_nickname"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_nickname">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etv_nickname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:afterTextChanged="@{(text) -> vm.loginDataChanged()}"
+                        android:hint="@string/etv_sign_up_nickname"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:text="@={vm.nickname}"
+                        android:textSize="20sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tf_soju_count"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_soju_count">
+                <TextView
+                    android:id="@+id/tv_soju_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/tv_sign_up_soju"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tf_nickname" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etv_soju_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/etv_sign_up_soju"
-                android:textSize="20sp"
-                android:inputType="number"
-                android:imeOptions="actionNext" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tf_soju_count"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_soju_count">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etv_soju_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/etv_sign_up_soju"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:textSize="20sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
         <Button
             android:id="@+id/btn_sign_in"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@{vm.loginFormState.dataValid ? @color/blue : @color/black}"
+            android:enabled="@{vm.loginFormState.dataValid}"
             android:text="@string/btn_sign_up_sign_up"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tf_soju_count" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

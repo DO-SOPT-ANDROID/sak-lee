@@ -23,7 +23,7 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
     private val signUpViewModel: SignUpViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        binding.vm=signUpViewModel
         clickSignUpBtn()
         collectSignUpEvent()
         isCheckSignUpResult()
@@ -82,8 +82,6 @@ class SignUpActivity : BindingActivity<ActivitySignUpBinding>(R.layout.activity_
 
                 SignUpState.FAIL -> {
                     snackBar(binding.root) { FAIL_MSG }
-                    binding.tfId.error = FAIL_MSG
-                    binding.tfPwd.error = FAIL_MSG
                 }
 
                 SignUpState.EMPTY -> snackBar(binding.root) { EMPTY_MSG }
